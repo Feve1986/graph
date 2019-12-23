@@ -58,6 +58,7 @@ int main(int argc, char* argv[])
     G.insert(6,5,3);
     G.insert(7,2,9);
     G.insert(8,1,15);
+    //G.print_graph();
     G.dijkstra(1);
     
 //
@@ -66,6 +67,7 @@ int main(int argc, char* argv[])
     // vertex u = vexSet.back();
     // std::cout<< u.data <<std::endl;
     // u = *(v1.neighbors.begin());
+
     // std::cout<< u.data <<std::endl;
     // u = *(std::next(v1.neighbors.begin(),2));
     // std::cout<< u.data <<std::endl;

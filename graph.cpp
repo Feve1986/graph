@@ -37,30 +37,45 @@ int graph::Initialize()
 int graph::print_path(int s)
 {
     vertex* u;
+    std::vector<int> path;
     for(int i=1; i<vexSet.size(); i++)
     {
-	u=&vexSet[i];
-	std::cout<< "The shortest distance from v"
-		 << s
-		 << " to v"
-		 << i
-		 << " is "
-		 << (*u).my_data.data
-		 << std::endl;
-	std::cout<< "The shortest path is "; 
-	while((*u).Dparent != NULL)
+	if(i!=s)
 	{
-	    std::cout<< "v" << (*u).name << "<-" ;
-	    u=(*u).Dparent;
+	    u=&vexSet[i];
+	    std::cout<< "The shortest distance from v"
+		     << s
+		     << " to v"
+		     << i
+		     << " is "
+		     << (*u).my_data.data
+		     << std::endl;
+	    std::cout<< "The shortest path is ";
+
+	    if((*u).my_data.data == MAX)
+		std::cout<< "No path between v"
+			 << s
+			 << "and v"
+			 << i
+			 <<std::endl;
+	    else
+	    {
+		while((*u).Dparent != NULL)
+		{
+		    path.push_back((*u).name);
+		    u=(*u).Dparent;
+		}
+		path.push_back((*u).name);
+		while(path.size()!=1)
+		{
+		    std::cout<< "v" << path.back() << "->";
+		    path.pop_back();
+		}
+		std::cout<< "v" <<path.back();
+		path.pop_back();
+		std::cout<< std::endl;
+	    }
 	}
-	if((*u).my_data.data == MAX)
-	    std::cout<< "No path between v"
-		 << s
-		 << "and v"
-		 << i
-		 <<std::endl;
-	else
-	    std::cout<<"v" <<(*u).name <<std::endl;
     }
     return 0;
 };
@@ -106,7 +121,35 @@ int graph::dijkstra(int s)
 		data_vector[n].data=(*(data_vector[n].tracker)).data;
 	}
     }
+    print_graph();
     print_path(s);
     return 0;
 };
-//this is also a copy, we should avoid copy
+
+int graph::print_graph()
+{
+    vertex u, v;
+    std::cout<< "The vertices of the graph are" <<std::endl;
+    for(int i=1; i<vexSet.size(); i++)
+    {
+	std::cout<< "v" << vexSet[i].name <<" "; 
+    }
+    std::cout<<std::endl;
+    std::cout<< "The edges of the graph are (out vertex, in vertex, weight)"
+	     <<std::endl;
+    for(int i=1; i<vexSet.size(); i++)
+    {
+	u=vexSet[i];
+	std::list<vertex*>::iterator it;
+	it=u.neighbors.begin();
+	for(int k=0; k<u.neighbors.size(); k++)
+	{
+	    v=(*(*it));
+	    std::cout<< "(v" <<u.name <<", v"<< v.name
+		     << ", " <<u.weights[k] << ")"
+		     <<std::endl;
+	    it++;
+	}
+    }
+    return 0;
+};
